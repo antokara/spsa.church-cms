@@ -12,6 +12,7 @@ $ npm install
 
 ```bash
 # development
+$ sudo docker-compose -f containers/compose.develop.yml up
 $ npm run webpack
 $ npm run start
 
