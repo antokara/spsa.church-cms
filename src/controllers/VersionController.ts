@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { VersionService } from '../services/VersionService';
+import { VersionService } from 'src/services/VersionService';
 
 @Controller('version')
 export class VersionController {

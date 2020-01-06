@@ -8,8 +8,17 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
+    "incremental": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "preserveConstEnums": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
-    "incremental": true
+    "paths": {
+      "src/*": ["src/*"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }

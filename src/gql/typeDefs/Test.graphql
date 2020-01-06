@@ -1,0 +1,8 @@
+type Query {
+  getTests: [Test]
+}
+
+type Test {
+  title: String
+  author: String
+}
