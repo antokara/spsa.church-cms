@@ -16,6 +16,10 @@ $ sudo docker-compose -f containers/compose.develop.yml up
 $ npm run webpack
 $ npm run start
 
+# generate GraphQL TS schema
+$ npm run genTypings
+Output `src/gql/generate-typings.ts`
+
 # production mode
 $
 ```

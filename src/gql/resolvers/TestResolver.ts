@@ -1,10 +1,12 @@
 import { Resolver, Query } from '@nestjs/graphql';
-import { tests } from 'src/gql/data/tests';
+import { TestsService } from 'src/services/TestsService';
 
 @Resolver('Test')
 export class TestResolver {
+  constructor(private readonly testsService: TestsService) {}
+
   @Query()
   async getTests() {
-    return tests;
+    return this.testsService.findAll();
   }
 }
