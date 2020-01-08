@@ -4,6 +4,23 @@ import {
   MongooseOptionsFactory,
 } from '@nestjs/mongoose';
 
+/**
+ * MongoDB Service
+ * responsible for initializing the MongooseModule in the AppModule like so:
+ *
+ * imports: [
+ *  ...
+ *  MongooseModule.forRootAsync({ useClass: MongoService }),
+ *  ...
+ * ]
+ *
+ * requires the following (process.env) environment variables:
+ *  - MONGO_USERNAME
+ *  - MONGO_PASSWORD
+ *  - MONGO_HOST
+ *  - MONGO_PORT
+ *  - MONGO_DATABASE
+ */
 @Injectable({})
 export class MongoService implements MongooseOptionsFactory {
   createMongooseOptions(): MongooseModuleOptions {
