@@ -1,0 +1,131 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Metadata": {
+    "AWS::CloudFormation::Designer": {
+      "9bb4ec56-dc07-4fbc-ad80-67ad9ef4e815": {
+        "size": {
+          "width": 60,
+          "height": 60
+        },
+        "position": {
+          "x": 60,
+          "y": 90
+        },
+        "z": 1,
+        "embeds": []
+      },
+      "1402dea5-aab5-4fb0-a30e-afdc8d31eb5b": {
+        "size": {
+          "width": 60,
+          "height": 60
+        },
+        "position": {
+          "x": -110,
+          "y": 90
+        },
+        "z": 0,
+        "embeds": []
+      }
+    }
+  },
+  "Resources": {
+    "cognitoUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true
+        },
+        "DeviceConfiguration": {
+          "ChallengeRequiredOnNewDevice": true,
+          "DeviceOnlyRememberedOnUserPrompt": true
+        },
+        "EnabledMfas": ["SOFTWARE_TOKEN_MFA", "SMS_MFA"],
+        "MfaConfiguration": "OPTIONAL",
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 13,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true,
+            "TemporaryPasswordValidityDays": 7
+          }
+        },
+        "UsernameAttributes": ["email"],
+        "AutoVerifiedAttributes": ["phone_number"],
+        "Schema": [
+          {
+            "Mutable": false,
+            "Name": "email",
+            "Required": true
+          },
+          {
+            "Mutable": false,
+            "Name": "name",
+            "Required": true
+          }
+        ],
+        "UserPoolName": "spsa.church-cms.test",
+        "UserPoolTags": {
+          "project": "spsa.church",
+          "creator": "cloudformation"
+        },
+        "SmsConfiguration": {
+          "SnsCallerArn": {
+            "Fn::GetAtt": ["cognitoSnsCallerRole", "Arn"]
+          },
+          "ExternalId": {
+            "Ref": "roleExternalId"
+          }
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "9bb4ec56-dc07-4fbc-ad80-67ad9ef4e815"
+        }
+      },
+      "DependsOn": ["cognitoSnsCallerRole"]
+    },
+    "cognitoSnsCallerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Description": "Cognito User Pool will use this as the SNS Caller Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": ["cognito-idp.amazonaws.com"]
+              },
+              "Action": ["sts:AssumeRole"],
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": {
+                    "Ref": "roleExternalId"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "ManagedPolicyArns": ["arn:aws:iam::aws:policy/AmazonSNSFullAccess"]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "1402dea5-aab5-4fb0-a30e-afdc8d31eb5b"
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "roleExternalId": {
+      "Type": "String"
+    }
+  },
+  "Outputs": {
+    "cognitoUserPoolId": {
+      "Value": { "Ref": "cognitoUserPool" }
+    }
+  }
+}
